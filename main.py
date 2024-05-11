@@ -46,22 +46,30 @@ def execute_tool(tool_call, funcs):
 
 class GetWeather(OpenAISchema):
     """
-    Get the weather info.
+    Determine weather in a location
+
+    ## Limitations
+    - Only returns temperature in fahrenheit
+    - Hardcoded to return the same value every time
     """
-    city: str = Field(..., description="The name of the city")
+    location: str = Field(..., description="The city and state e.g. San Francisco, CA")
 
     def run(self):
-      return(f"Rainy, 10 degrees celsius")
+      return(f"Rainy, 48 degrees fahrenheit in {self.location}")
 
 class GetDirections(OpenAISchema):
     """
     Get driving directions from one city to another.
+
+    ## Limitations
+    - Distances are only given in miles
+    - Hardcoded to return the same value every time
     """
     from_city: str = Field(..., description="The name of the departure city")
     to_city: str = Field(..., description="The name of the destination city")
 
     def run(self):
-      return(f"Drive north.")
+      return(f"Drive north to get from {self.from_city} to {self.to_city}")
 
 tool_functions = [GetWeather, GetDirections]
 

@@ -1,4 +1,8 @@
-`main.py` shows how to use Instructor to describe functions that LLMs can call. Includes examples for OpenAI and Groq.
+## Overview
+
+This shows how to use Instructor to do Function Calling (aka Tools) with Groq and OpenAI. Check out `main.py` for a basic example of how to use Instructor to describe functions that LLMs can call. This avoids all the ugly schema descriptions and allows you to focus on the logic of your functions.
+
+Make your own functions with detailed descriptions that help the LLM understand when to use each one.
 
 ## Prerequisites
 
@@ -51,4 +55,42 @@ Select the Python interpreter in Cursor or VS Code:
 
 This will set the selected interpreter / environment as the default for your current workspace.
 
+## Why?
 
+Describe a function and its parameters in one place. For example:
+
+```python
+class GetWeather(OpenAISchema):
+    """
+    Determine weather in a location
+
+    ## Limitations
+    - Only returns temperature in fahrenheit
+    - Hardcoded to return the same value every time
+    """
+
+    location: str = Field(..., description="The city and state e.g. San Francisco, CA")
+```
+
+Instead of...
+
+```json
+{
+  "name": "get_weather",
+  "description": "Determine weather in my location",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "location": {
+        "type": "string",
+        "description": "The city and state e.g. San Francisco, CA"
+      },
+    },
+    "required": [
+      "location"
+    ]
+  }
+}
+```
+
+Either way, you still need to write the logic for the function. But with Instructor, you can focus on the logic and let the schema be generated for you.
